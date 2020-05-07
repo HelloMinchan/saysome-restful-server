@@ -22,6 +22,9 @@ func main() {
 	// 크래쉬 복구 미들웨어
 	e.Use(middleware.Recover())
 
+	// CORS 미들웨어
+	e.Use(middleware.CORS())
+
 	// 메인 API
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello World!")
