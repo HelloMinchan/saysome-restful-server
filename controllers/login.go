@@ -39,7 +39,10 @@ func Login(c echo.Context) error {
 	// 데이터베이스 쿼리 요청
 	rows, err := db.Query("SELECT name, email, password FROM member_tb WHERE email = ? and password = ?", paramEmail, paramPassword)
 	if err != nil {
-		log.Fatal(err)
+		// log.Fatal(err)
+
+		// 에러 객체 반환 후 클라이언트에서 "API Error" 문자열로 치환 됨
+		return err
 	}
 	defer rows.Close()
 
