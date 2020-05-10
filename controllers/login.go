@@ -29,8 +29,8 @@ func Login(c echo.Context) error {
 	}
 	defer db.Close()
 
-	paramEmail := c.Param("email")
-	paramPassword := c.Param("password")
+	paramEmail := c.FormValue("email")
+	paramPassword := c.FormValue("password")
 
 	var email = ""
 	var password = ""

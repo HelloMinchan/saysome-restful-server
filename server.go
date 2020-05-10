@@ -31,7 +31,7 @@ func main() {
 	})
 
 	// 로그인 API
-	e.GET("/login/:email/:password", controllers.Login)
+	e.POST("/login", controllers.Login)
 
 	// 서버 생성 Port 1323
 	e.Logger.Fatal(e.Start(":1323"))
