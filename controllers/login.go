@@ -15,9 +15,12 @@ import (
 
 // 반환 데이터 json 타입
 type userData struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	Name     string `json:"name"`
+	Email                string `json:"email"`
+	Password             string `json:"password"`
+	Name                 string `json:"name"`
+	Food                 string `json:"food"`
+	ProvisionAccept      string `json:"provisionAccept"`
+	EmailReceptionAccept string `json:"emailReceptionAccept"`
 }
 
 // Login 로그인 컨트롤러
@@ -32,12 +35,16 @@ func Login(c echo.Context) error {
 	paramEmail := c.FormValue("email")
 	paramPassword := c.FormValue("password")
 
-	var email = ""
-	var password = ""
-	var name = ""
+	// 회원정보 임시로 담을 변수
+	var emailCol = ""
+	var passwordCOl = ""
+	var nameCol = ""
+	var foodCol = ""
+	var provisionAcceptCol = ""
+	var emailReceptionAcceptCol = ""
 
-	// 데이터베이스 쿼리 요청
-	rows, err := db.Query("SELECT name, email, password FROM member_tb WHERE email = ? and password = ?", paramEmail, paramPassword)
+	// 데이터베이스 회원 정보 쿼리 요청
+	rows, err := db.Query("SELECT email_col, password_col, name_col, food_col, provisionAccept_col, emailReceptionAccept_col FROM member_tb WHERE email_col = ? and password_col = ?", paramEmail, paramPassword)
 	if err != nil {
 		// log.Fatal(err)
 
@@ -46,19 +53,23 @@ func Login(c echo.Context) error {
 	}
 	defer rows.Close()
 
+	// 회원 정보 다중 컬럼 스캔하여 임시 변수에 저장
 	for rows.Next() {
-		err := rows.Scan(&name, &email, &password)
+		err := rows.Scan(&emailCol, &passwordCOl, &nameCol, &foodCol, &provisionAcceptCol, &emailReceptionAcceptCol)
 		if err != nil {
 			log.Fatal(err)
 		}
 	}
 
 	// 데이터베이스 조회 후 값이 들어온 경우
-	if email != "" && password != "" && name != "" {
+	if emailCol != "" && passwordCOl != "" && nameCol != "" && foodCol != "" {
 		u := &userData{
-			Name:     name,
-			Email:    email,
-			Password: password,
+			Email:                emailCol,
+			Password:             passwordCOl,
+			Name:                 nameCol,
+			Food:                 foodCol,
+			ProvisionAccept:      provisionAcceptCol,
+			EmailReceptionAccept: emailReceptionAcceptCol,
 		}
 		return c.JSON(http.StatusOK, u)
 	}
