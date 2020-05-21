@@ -33,6 +33,9 @@ func main() {
 	// 로그인 API
 	e.POST("/login", controllers.Login)
 
+	// 이메일 중복 체크 API
+	e.POST("/emailduplicatecheck", controllers.EmailDuplicateCheck)
+
 	// 서버 생성 Port 1323
 	e.Logger.Fatal(e.Start(":1323"))
 }
